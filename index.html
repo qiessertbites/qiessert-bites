@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6b3e26">
+
+    <title>Qiessert Bites</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div>
+            <p class="welcome-text">Welcome to</p>
+            <h1>Qiessert Bites</h1>
+            <p class="tagline">Dessert • Coffee • Pasta</p>
+        </div>
+
+        <div class="header-logo">
+            🍰
+        </div>
+    </header>
+
+
+    <!-- HOME PAGE -->
+    <main>
+
+        <section id="homePage" class="page active">
+
+            <!-- PROMOTION BANNER -->
+            <div class="hero-banner">
+
+                <div class="hero-content">
+                    <span class="promo-label">SPECIAL OFFER</span>
+
+                    <h2>Sweet Moments Start Here</h2>
+
+                    <p>
+                        Discover our desserts, coffee and delicious meals.
+                    </p>
+
+                    <button class="primary-btn" onclick="showPage('menuPage')">
+                        Explore Menu
+                    </button>
+                </div>
+
+                <div class="hero-emoji">
+                    🧁
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTION -->
+            <div class="section-header">
+                <h2>Quick Access</h2>
+            </div>
+
+            <div class="quick-grid">
+
+                <button class="quick-card" onclick="showPage('menuPage')">
+                    <span>🍰</span>
+                    <p>Menu</p>
+                </button>
+
+                <button class="quick-card" onclick="showPage('promoPage')">
+                    <span>🎁</span>
+                    <p>Promotion</p>
+                </button>
+
+                <button class="quick-card" onclick="showPage('contactPage')">
+                    <span>💬</span>
+                    <p>Contact</p>
+                </button>
+
+                <button class="quick-card" onclick="showPage('contactPage')">
+                    <span>📍</span>
+                    <p>Location</p>
+                </button>
+
+            </div>
+
+
+            <!-- POPULAR MENU -->
+            <div class="section-header">
+                <h2>Popular Menu</h2>
+
+                <button onclick="showPage('menuPage')">
+                    View All
+                </button>
+            </div>
+
+
+            <div class="popular-grid">
+
+                <div class="popular-card">
+
+                    <img
+                        src="images/cakechocolate.webp"
+                        alt="Chocolate Cake"
+                    >
+
+                    <div class="popular-info">
+                        <h3>Chocolate Cake</h3>
+                        <p>Dessert</p>
+                        <strong>RM15</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="popular-card">
+
+                    <img
+                        src="images/coffee.jpg"
+                        alt="Coffee"
+                    >
+
+                    <div class="popular-info">
+                        <h3>Special Coffee</h3>
+                        <p>Coffee</p>
+                        <strong>RM12</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="popular-card">
+
+                    <img
+                        src="images/pasta.webp"
+                        alt="Pasta"
+                    >
+
+                    <div class="popular-info">
+                        <h3>Creamy Pasta</h3>
+                        <p>Pasta</p>
+                        <strong>RM18</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TODAY PROMO -->
+            <div class="section-header">
+                <h2>Today's Promotion</h2>
+            </div>
+
+            <div class="promo-card">
+
+                <div>
+                    <span>🔥 Limited Offer</span>
+                    <h3>Check Our Latest Promotion</h3>
+                    <p>Enjoy special offers from Qiessert Bites.</p>
+                </div>
+
+                <button onclick="showPage('promoPage')">
+                    View Promo
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- MENU PAGE -->
+        <section id="menuPage" class="page">
+
+            <div class="page-title">
+
+                <div>
+                    <p>Discover</p>
+                    <h2>Our Menu</h2>
+                </div>
+
+                <span>🍽️</span>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div class="search-box">
+
+                <span>🔍</span>
+
+                <input
+                    type="text"
+                    id="menuSearch"
+                    placeholder="Search menu..."
+                    onkeyup="searchMenu()"
+                >
+
+            </div>
+
+
+            <!-- CATEGORY -->
+            <div class="category-tabs">
+
+                <button
+                    class="category-btn active"
+                    onclick="filterMenu('all', this)"
+                >
+                    All
+                </button>
+
+                <button
+                    class="category-btn"
+                    onclick="filterMenu('dessert', this)"
+                >
+                    Dessert
+                </button>
+
+                <button
+                    class="category-btn"
+                    onclick="filterMenu('coffee', this)"
+                >
+                    Coffee
+                </button>
+
+                <button
+                    class="category-btn"
+                    onclick="filterMenu('pasta', this)"
+                >
+                    Pasta
+                </button>
+
+            </div>
+
+
+            <div class="menu-list">
+
+
+                <!-- CHOCOLATE CAKE -->
+                <div
+                    class="food-card menu-item"
+                    data-category="dessert"
+                    data-name="chocolate cake"
+                >
+
+                    <img
+                        src="images/cakechocolate.webp"
+                        alt="Chocolate Cake"
+                    >
+
+                    <div class="food-details">
+
+                        <span class="food-category">
+                            Dessert
+                        </span>
+
+                        <h3>Chocolate Cake</h3>
+
+                        <p>
+                            Rich and delicious chocolate dessert.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <strong>RM15</strong>
+
+                            <a
+                                href="https://wa.me/"
+                                class="small-order-btn"
+                            >
+                                Order
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- COFFEE -->
+                <div
+                    class="food-card menu-item"
+                    data-category="coffee"
+                    data-name="special coffee"
+                >
+
+                    <img
+                        src="images/coffee.jpg"
+                        alt="Special Coffee"
+                    >
+
+                    <div class="food-details">
+
+                        <span class="food-category">
+                            Coffee
+                        </span>
+
+                        <h3>Special Coffee</h3>
+
+                        <p>
+                            Freshly brewed coffee for your perfect day.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <strong>RM12</strong>
+
+                            <a
+                                href="https://wa.me/"
+                                class="small-order-btn"
+                            >
+                                Order
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASTA -->
+                <div
+                    class="food-card menu-item"
+                    data-category="pasta"
+                    data-name="creamy pasta"
+                >
+
+                    <img
+                        src="images/pasta.webp"
+                        alt="Creamy Pasta"
+                    >
+
+                    <div class="food-details">
+
+                        <span class="food-category">
+                            Pasta
+                        </span>
+
+                        <h3>Creamy Pasta</h3>
+
+                        <p>
+                            Creamy and satisfying cafe-style pasta.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <strong>RM18</strong>
+
+                            <a
+                                href="https://wa.me/"
+                                class="small-order-btn"
+                            >
+                                Order
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PROMOTION PAGE -->
+        <section id="promoPage" class="page">
+
+            <div class="page-title">
+
+                <div>
+                    <p>Special for you</p>
+                    <h2>Promotions</h2>
+                </div>
+
+                <span>🎁</span>
+
+            </div>
+
+
+            <div class="promotion-list">
+
+
+                <div class="promotion-card">
+
+                    <div class="promotion-icon">
+                        🍰
+                    </div>
+
+                    <div>
+                        <span>Special Deal</span>
+                        <h3>Buy 2 Free 1</h3>
+                        <p>
+                            Buy any 2 selected desserts and receive 1 selected dessert free.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="promotion-card">
+
+                    <div class="promotion-icon">
+                        🎂
+                    </div>
+
+                    <div>
+                        <span>Celebration</span>
+                        <h3>Birthday Package</h3>
+                        <p>
+                            Celebrate your special day with Qiessert Bites.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="promotion-card">
+
+                    <div class="promotion-icon">
+                        ☕
+                    </div>
+
+                    <div>
+                        <span>Combo</span>
+                        <h3>Coffee & Cake</h3>
+                        <p>
+                            Enjoy coffee and cake together at a special promotional price.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CONTACT PAGE -->
+        <section id="contactPage" class="page">
+
+            <div class="page-title">
+
+                <div>
+                    <p>We're here for you</p>
+                    <h2>Contact Us</h2>
+                </div>
+
+                <span>💬</span>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <div class="contact-icon">
+                    💬
+                </div>
+
+                <div>
+                    <h3>WhatsApp</h3>
+
+                    <p>
+                        Contact us for orders and enquiries.
+                    </p>
+                </div>
+
+                <a
+                    href="https://wa.me/"
+                    target="_blank"
+                >
+                    Open
+                </a>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <div class="contact-icon">
+                    📍
+                </div>
+
+                <div>
+                    <h3>Location</h3>
+
+                    <p>
+                        Find Qiessert Bites in Sendayan.
+                    </p>
+                </div>
+
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query=Qiessert+Bites+Sendayan"
+                    target="_blank"
+                >
+                    Maps
+                </a>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <div class="contact-icon">
+                    📸
+                </div>
+
+                <div>
+                    <h3>Social Media</h3>
+
+                    <p>
+                        Follow our latest updates and promotions.
+                    </p>
+                </div>
+
+                <a href="#">
+                    Soon
+                </a>
+
+            </div>
+
+
+            <div class="about-card">
+
+                <span>🍰</span>
+
+                <h3>About Qiessert Bites</h3>
+
+                <p>
+                    Qiessert Bites offers desserts, coffee, pasta and a cosy
+                    space for customers to enjoy special moments and celebrations.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FLOATING WHATSAPP -->
+    <a
+        href="https://wa.me/"
+        class="floating-whatsapp"
+        target="_blank"
+        aria-label="WhatsApp"
+    >
+        💬
+    </a>
+
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-btn active"
+            onclick="showPage('homePage', this)"
+        >
+            <span>🏠</span>
+            <small>Home</small>
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="showPage('menuPage', this)"
+        >
+            <span>🍰</span>
+            <small>Menu</small>
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="showPage('promoPage', this)"
+        >
+            <span>🎁</span>
+            <small>Promo</small>
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="showPage('contactPage', this)"
+        >
+            <span>💬</span>
+            <small>Contact</small>
+        </button>
+
+    </nav>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
