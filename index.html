@@ -17,12 +17,9 @@
     <title>Qiessert Bites</title>
 
     <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-
-    >
+    rel="stylesheet"
+    href="style.css?v=500"
+>
 </head>
 
 
@@ -134,6 +131,13 @@
                     <p>Promotion</p>
                 </button>
 
+<button
+    class="quick-card"
+    onclick="showPage('servicesPage')"
+>
+    <span>🎉</span>
+    <p>Services</p>
+</button>
 
                 <button
                     class="quick-card"
@@ -177,6 +181,43 @@
                 class="popular-grid"
             ></div>
 
+<!-- CELEBRATE WITH US -->
+
+<div class="section-header">
+    <h2>Celebrate With Us</h2>
+
+    <button
+        onclick="showPage('servicesPage')"
+    >
+        View Services
+    </button>
+</div>
+
+<div class="promo-card">
+
+    <div>
+
+        <span>
+            🎉 Special Moments
+        </span>
+
+        <h3>
+            Birthday, Events & Chocolate Bouquet
+        </h3>
+
+        <p>
+            Discover celebration services and special gifts from Qiessert Bites.
+        </p>
+
+    </div>
+
+    <button
+        onclick="showPage('servicesPage')"
+    >
+        Explore
+    </button>
+
+</div>
 
             <!-- TODAY'S PROMOTION FROM GOOGLE SHEETS -->
 
@@ -329,7 +370,31 @@
 
         </section>
 
+<!-- SERVICES PAGE -->
 
+<section
+    id="servicesPage"
+    class="page"
+>
+
+    <div class="page-title">
+
+        <div>
+            <p>More from us</p>
+            <h2>Our Services</h2>
+        </div>
+
+        <span>🎉</span>
+
+    </div>
+
+
+    <div
+        id="servicesList"
+        class="promotion-list"
+    ></div>
+
+</section>
 
         <!-- CONTACT PAGE -->
 
@@ -418,6 +483,24 @@
 
             </div>
 
+<div class="contact-card">
+
+    <div class="contact-icon">
+        🕒
+    </div>
+
+    <div>
+        <h3>
+            Operating Hours
+        </h3>
+
+        <p>
+            Monday - Sunday<br>
+            10:00 AM - 10:00 PM
+        </p>
+    </div>
+
+</div>
 
             <!-- SOCIAL MEDIA -->
 
@@ -542,7 +625,7 @@
 
 <!-- JAVASCRIPT -->
 
-<script src="script.js?v=400"></script>
+<script src="script.js?v=500"></script>
 
 
 </body>

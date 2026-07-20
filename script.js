@@ -1,8 +1,21 @@
 // ===============================
+// GOOGLE SHEETS LINKS
+// ===============================
+
+const MENU_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=1562662256&single=true&output=csv";
+
+const PROMOTION_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=226753387&single=true&output=csv";
+
+const SERVICES_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=21556612&single=true&output=csv";
+    
+// ===============================
 // PAGE NAVIGATION
 // ===============================
 
-function showPage(pageId, clickedButton = null) {
+async function showPage(pageId, clickedButton = null) {
     document.querySelectorAll(".page").forEach((page) => {
         page.classList.remove("active");
     });
@@ -36,19 +49,25 @@ function showPage(pageId, clickedButton = null) {
         }
     }
 
+    // Refresh data automatik ikut page
+    if (pageId === "homePage") {
+        await loadPopularMenu();
+        await loadHomePromotion();
+    }
+
+    if (pageId === "menuPage") {
+        await loadMenu();
+    }
+
+    if (pageId === "promoPage") {
+        await loadPromotions();
+    }
+
+    if (pageId === "servicesPage") {
+    await loadServices();
+}
     window.scrollTo(0, 0);
 }
-
-
-// ===============================
-// GOOGLE SHEETS LINKS
-// ===============================
-
-const MENU_CSV_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=1562662256&single=true&output=csv";
-
-const PROMOTION_CSV_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=226753387&single=true&output=csv";
 
 
 // ===============================
@@ -80,28 +99,19 @@ function parseCSVLine(line) {
 
 
 // ===============================
-// LOAD MENU FROM GOOGLE SHEETS
+// LOAD MENU
 // ===============================
 
 async function loadMenu() {
     const menuList = document.getElementById("menuList");
 
-    if (!menuList) {
-        return;
-    }
-
-    menuList.innerHTML = `
-        <div class="food-card">
-            <div class="food-details">
-                <h3>Loading menu...</h3>
-            </div>
-        </div>
-    `;
+    if (!menuList) return;
 
     try {
-        const response = await fetch(MENU_CSV_URL, {
-            cache: "no-store"
-        });
+        const response = await fetch(
+            MENU_CSV_URL + "&t=" + Date.now(),
+            { cache: "no-store" }
+        );
 
         const text = await response.text();
 
@@ -121,9 +131,7 @@ async function loadMenu() {
             const image = columns[4] || "";
             const status = (columns[5] || "").toLowerCase();
 
-            if (status !== "active") {
-                return;
-            }
+            if (status !== "active") return;
 
             menuHTML += `
                 <div
@@ -142,9 +150,7 @@ async function loadMenu() {
                             ${category}
                         </span>
 
-                        <h3>
-                            ${productName}
-                        </h3>
+                        <h3>${productName}</h3>
 
                         <p>
                             Available at Qiessert Bites.
@@ -152,17 +158,17 @@ async function loadMenu() {
 
                         <div class="food-bottom">
 
-                            <strong>
-                                RM${price}
-                            </strong>
+                            <strong>RM${price}</strong>
 
                             <a
-    href="https://api.whatsapp.com/send?phone=60148584207&text=Hi%20Qiessert%20Bites%2C%20saya%20nak%20order%20${encodeURIComponent(productName)}"
-    class="small-order-btn"
-    target="_blank"
->
-    Order
-</a>
+                                href="https://api.whatsapp.com/send?phone=60148584207&text=${encodeURIComponent(
+                                    `Hi Qiessert Bites, saya nak order ${productName}`
+                                )}"
+                                class="small-order-btn"
+                                target="_blank"
+                            >
+                                Order
+                            </a>
 
                         </div>
 
@@ -172,49 +178,37 @@ async function loadMenu() {
             `;
         });
 
-        if (menuHTML === "") {
-            menuList.innerHTML = `
-                <div class="food-card">
-                    <div class="food-details">
-                        <h3>No Menu Available</h3>
-                        <p>Please check again later.</p>
-                    </div>
+        menuList.innerHTML =
+            menuHTML ||
+            `
+            <div class="food-card">
+                <div class="food-details">
+                    <h3>No Menu Available</h3>
+                    <p>Please check again later.</p>
                 </div>
+            </div>
             `;
-        } else {
-            menuList.innerHTML = menuHTML;
-        }
 
     } catch (error) {
         console.error("MENU ERROR:", error);
-
-        menuList.innerHTML = `
-            <div class="food-card">
-                <div class="food-details">
-                    <h3>Menu unavailable</h3>
-                    <p>Please try again later.</p>
-                </div>
-            </div>
-        `;
     }
 }
 
 
 // ===============================
-// LOAD POPULAR MENU ON HOME
+// LOAD POPULAR MENU
 // ===============================
 
 async function loadPopularMenu() {
     const popularMenu = document.getElementById("popularMenu");
 
-    if (!popularMenu) {
-        return;
-    }
+    if (!popularMenu) return;
 
     try {
-        const response = await fetch(MENU_CSV_URL, {
-            cache: "no-store"
-        });
+        const response = await fetch(
+            MENU_CSV_URL + "&t=" + Date.now(),
+            { cache: "no-store" }
+        );
 
         const text = await response.text();
 
@@ -227,9 +221,7 @@ async function loadPopularMenu() {
         let count = 0;
 
         rows.forEach((line) => {
-            if (count >= 3) {
-                return;
-            }
+            if (count >= 3) return;
 
             const columns = parseCSVLine(line);
 
@@ -239,9 +231,7 @@ async function loadPopularMenu() {
             const image = columns[4] || "";
             const status = (columns[5] || "").toLowerCase();
 
-            if (status !== "active") {
-                return;
-            }
+            if (status !== "active") return;
 
             popularHTML += `
                 <div class="popular-card">
@@ -253,17 +243,11 @@ async function loadPopularMenu() {
 
                     <div class="popular-info">
 
-                        <h3>
-                            ${productName}
-                        </h3>
+                        <h3>${productName}</h3>
 
-                        <p>
-                            ${category}
-                        </p>
+                        <p>${category}</p>
 
-                        <strong>
-                            RM${price}
-                        </strong>
+                        <strong>RM${price}</strong>
 
                     </div>
 
@@ -282,7 +266,7 @@ async function loadPopularMenu() {
 
 
 // ===============================
-// MENU CATEGORY FILTER
+// MENU FILTER
 // ===============================
 
 function filterMenu(category, clickedButton) {
@@ -295,14 +279,11 @@ function filterMenu(category, clickedButton) {
     }
 
     document.querySelectorAll(".menu-item").forEach((item) => {
-        if (
+        item.style.display =
             category === "all" ||
             item.dataset.category === category
-        ) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
-        }
+                ? "flex"
+                : "none";
     });
 
     const searchInput = document.getElementById("menuSearch");
@@ -320,9 +301,7 @@ function filterMenu(category, clickedButton) {
 function searchMenu() {
     const searchInput = document.getElementById("menuSearch");
 
-    if (!searchInput) {
-        return;
-    }
+    if (!searchInput) return;
 
     const keyword = searchInput.value
         .toLowerCase()
@@ -331,11 +310,10 @@ function searchMenu() {
     document.querySelectorAll(".menu-item").forEach((item) => {
         const name = item.dataset.name || "";
 
-        if (name.includes(keyword)) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
-        }
+        item.style.display =
+            name.includes(keyword)
+                ? "flex"
+                : "none";
     });
 }
 
@@ -345,30 +323,16 @@ function searchMenu() {
 // ===============================
 
 async function loadPromotions() {
-    const container = document.getElementById("promotionList");
+    const container =
+        document.getElementById("promotionList");
 
-    if (!container) {
-        return;
-    }
-
-    container.innerHTML = `
-        <div class="promotion-card">
-            <div class="promotion-icon">
-                ⏳
-            </div>
-
-            <div>
-                <h3>
-                    Loading promotion...
-                </h3>
-            </div>
-        </div>
-    `;
+    if (!container) return;
 
     try {
-        const response = await fetch(PROMOTION_CSV_URL, {
-            cache: "no-store"
-        });
+        const response = await fetch(
+            PROMOTION_CSV_URL + "&t=" + Date.now(),
+            { cache: "no-store" }
+        );
 
         const text = await response.text();
 
@@ -386,9 +350,7 @@ async function loadPromotions() {
             const description = columns[2] || "";
             const status = (columns[3] || "").toLowerCase();
 
-            if (status !== "active") {
-                return;
-            }
+            if (status !== "active") return;
 
             promotionHTML += `
                 <div class="promotion-card">
@@ -398,92 +360,41 @@ async function loadPromotions() {
                     </div>
 
                     <div>
-
-                        <span>
-                            Latest Promotion
-                        </span>
-
-                        <h3>
-                            ${title}
-                        </h3>
-
-                        <p>
-                            ${description}
-                        </p>
-
+                        <span>Latest Promotion</span>
+                        <h3>${title}</h3>
+                        <p>${description}</p>
                     </div>
 
                 </div>
             `;
         });
 
-        if (promotionHTML === "") {
-            container.innerHTML = `
-                <div class="promotion-card">
-
-                    <div class="promotion-icon">
-                        🎁
-                    </div>
-
-                    <div>
-                        <h3>No Promotion Available</h3>
-                        <p>Please check again later.</p>
-                    </div>
-
+        container.innerHTML =
+            promotionHTML ||
+            `
+            <div class="promotion-card">
+                <div class="promotion-icon">🎁</div>
+                <div>
+                    <h3>No Promotion Available</h3>
+                    <p>Please check again later.</p>
                 </div>
+            </div>
             `;
-        } else {
-            container.innerHTML = promotionHTML;
-        }
 
     } catch (error) {
         console.error("PROMOTION ERROR:", error);
-
-        container.innerHTML = `
-            <div class="promotion-card">
-
-                <div class="promotion-icon">
-                    ⚠️
-                </div>
-
-                <div>
-                    <h3>Promotion unavailable</h3>
-                    <p>Please try again later.</p>
-                </div>
-
-            </div>
-        `;
     }
 }
+async function loadServices() {
+    const servicesList = document.getElementById("servicesList");
 
-
-// ===============================
-// LOAD TODAY'S PROMOTION ON HOME
-// ===============================
-
-async function loadHomePromotion() {
-    const homePromotion = document.getElementById("homePromotion");
-
-    if (!homePromotion) {
-        return;
-    }
-
-    homePromotion.innerHTML = `
-        <div>
-            <span>
-                ⏳ Loading
-            </span>
-
-            <h3>
-                Loading latest promotion...
-            </h3>
-        </div>
-    `;
+    if (!servicesList) return;
 
     try {
-        const response = await fetch(PROMOTION_CSV_URL, {
-            cache: "no-store"
-        });
+        const response = await fetch(
+            SERVICES_CSV_URL + "&t=" + Date.now(),
+            { cache: "no-store" }
+        );
 
         const text = await response.text();
 
@@ -492,7 +403,91 @@ async function loadHomePromotion() {
             .split(/\r?\n/)
             .slice(1);
 
-        let firstActivePromotion = null;
+        let servicesHTML = "";
+
+        rows.forEach((line) => {
+            const columns = parseCSVLine(line);
+
+            const serviceName = columns[1] || "";
+            const description = columns[2] || "";
+            const status = (columns[3] || "").toLowerCase();
+
+            if (status !== "active") return;
+
+            servicesHTML += `
+                <div class="promotion-card">
+
+                    <div class="promotion-icon">
+                        🎉
+                    </div>
+
+                    <div>
+                        <span>Service</span>
+
+                        <h3>
+                            ${serviceName}
+                        </h3>
+
+                        <p>
+                            ${description}
+                        </p>
+
+                        <a
+                            href="https://api.whatsapp.com/send?phone=60148584207&text=${encodeURIComponent(
+                                `Hi Qiessert Bites, saya nak tanya pasal ${serviceName}`
+                            )}"
+                            class="small-order-btn"
+                            target="_blank"
+                        >
+                            Enquire
+                        </a>
+                    </div>
+
+                </div>
+            `;
+        });
+
+        servicesList.innerHTML =
+            servicesHTML ||
+            `
+            <div class="promotion-card">
+                <div class="promotion-icon">🎉</div>
+                <div>
+                    <h3>No Services Available</h3>
+                    <p>Please check again later.</p>
+                </div>
+            </div>
+            `;
+
+    } catch (error) {
+        console.error("SERVICES ERROR:", error);
+    }
+}
+
+// ===============================
+// LOAD HOME PROMOTION
+// ===============================
+
+async function loadHomePromotion() {
+    const homePromotion =
+        document.getElementById("homePromotion");
+
+    if (!homePromotion) return;
+
+    try {
+        const response = await fetch(
+            PROMOTION_CSV_URL + "&t=" + Date.now(),
+            { cache: "no-store" }
+        );
+
+        const text = await response.text();
+
+        const rows = text
+            .trim()
+            .split(/\r?\n/)
+            .slice(1);
+
+        let promotion = null;
 
         for (const line of rows) {
             const columns = parseCSVLine(line);
@@ -502,36 +497,22 @@ async function loadHomePromotion() {
             const status = (columns[3] || "").toLowerCase();
 
             if (status === "active") {
-                firstActivePromotion = {
+                promotion = {
                     title,
                     description
                 };
-
                 break;
             }
         }
 
-        if (!firstActivePromotion) {
+        if (!promotion) {
             homePromotion.innerHTML = `
                 <div>
-                    <span>
-                        🎁 Promotion
-                    </span>
-
-                    <h3>
-                        No Promotion Available
-                    </h3>
-
-                    <p>
-                        Please check again later.
-                    </p>
+                    <span>🎁 Promotion</span>
+                    <h3>No Promotion Available</h3>
+                    <p>Please check again later.</p>
                 </div>
-
-                <button onclick="showPage('promoPage')">
-                    View Promo
-                </button>
             `;
-
             return;
         }
 
@@ -543,11 +524,11 @@ async function loadHomePromotion() {
                 </span>
 
                 <h3>
-                    ${firstActivePromotion.title}
+                    ${promotion.title}
                 </h3>
 
                 <p>
-                    ${firstActivePromotion.description}
+                    ${promotion.description}
                 </p>
 
             </div>
@@ -559,24 +540,6 @@ async function loadHomePromotion() {
 
     } catch (error) {
         console.error("HOME PROMOTION ERROR:", error);
-
-        homePromotion.innerHTML = `
-            <div>
-
-                <span>
-                    ⚠️ Promotion
-                </span>
-
-                <h3>
-                    Promotion unavailable
-                </h3>
-
-                <p>
-                    Please try again later.
-                </p>
-
-            </div>
-        `;
     }
 }
 
@@ -585,14 +548,12 @@ async function loadHomePromotion() {
 // START APP
 // ===============================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadMenu();
+    await loadPopularMenu();
+    await loadPromotions();
+    await loadHomePromotion();
+    await loadServices();
+
     showPage("homePage");
-
-    loadMenu();
-
-    loadPopularMenu();
-
-    loadPromotions();
-
-    loadHomePromotion();
 });
