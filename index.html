@@ -17,14 +17,13 @@
     <title>Qiessert Bites</title>
 
     <link
-    rel="stylesheet"
-    href="style.css?v=500"
->
+        rel="stylesheet"
+        href="style.css?v=500"
+    >
 </head>
 
 
 <body>
-
 <div class="app">
 
 
@@ -43,7 +42,7 @@
             </h1>
 
             <p class="tagline">
-                Dessert • Coffee • Pasta
+                Dessert • Pasta • Vendor
             </p>
 
         </div>
@@ -57,7 +56,9 @@
 
 
     <main>
-                <!-- HOME PAGE -->
+
+
+        <!-- HOME PAGE -->
 
         <section
             id="homePage"
@@ -84,12 +85,13 @@
                         coffee and delicious meals.
                     </p>
 
-                    <button
-                        class="primary-btn"
-                        onclick="showPage('menuPage')"
-                    >
-                        Explore Menu
-                    </button>
+                  <button
+    class="primary-btn"
+    onclick="showPage('menuPage')"
+>
+    Explore Menu
+    <span class="arrow">→</span>
+</button>
 
                 </div>
 
@@ -131,13 +133,15 @@
                     <p>Promotion</p>
                 </button>
 
-<button
-    class="quick-card"
-    onclick="showPage('servicesPage')"
->
-    <span>🎉</span>
-    <p>Services</p>
-</button>
+
+                <button
+                    class="quick-card"
+                    onclick="showPage('servicesPage')"
+                >
+                    <span>🎉</span>
+                    <p>Services</p>
+                </button>
+
 
                 <button
                     class="quick-card"
@@ -146,78 +150,54 @@
                     <span>💬</span>
                     <p>Contact</p>
                 </button>
-
-
-                <button
-                    class="quick-card"
-                    onclick="showPage('contactPage')"
-                >
-                    <span>📍</span>
-                    <p>Location</p>
-                </button>
+                
 
             </div>
 
-
-            <!-- POPULAR MENU FROM GOOGLE SHEETS -->
+            <!-- CELEBRATE WITH US -->
 
             <div class="section-header">
 
                 <h2>
-                    Popular Menu
+                    Celebrate With Us
                 </h2>
 
                 <button
-                    onclick="showPage('menuPage')"
+                    onclick="showPage('servicesPage')"
                 >
-                    View All
+                    View Services
                 </button>
 
             </div>
 
 
-            <div
-                id="popularMenu"
-                class="popular-grid"
-            ></div>
+            <div class="promo-card">
 
-<!-- CELEBRATE WITH US -->
+                <div>
 
-<div class="section-header">
-    <h2>Celebrate With Us</h2>
+                    <span>
+                        🎉 Special Moments
+                    </span>
 
-    <button
-        onclick="showPage('servicesPage')"
-    >
-        View Services
-    </button>
-</div>
+                    <h3>
+                        Birthday, Events & Flower Bouquet
+                    </h3>
 
-<div class="promo-card">
+                    <p>
+                        Discover celebration services and special gifts
+                        from Qiessert Bites.
+                    </p>
 
-    <div>
+                </div>
 
-        <span>
-            🎉 Special Moments
-        </span>
+                <button
+                    onclick="showPage('servicesPage')"
+                >
+                    Explore
+                </button>
 
-        <h3>
-            Birthday, Events & Chocolate Bouquet
-        </h3>
+            </div>
 
-        <p>
-            Discover celebration services and special gifts from Qiessert Bites.
-        </p>
-
-    </div>
-
-    <button
-        onclick="showPage('servicesPage')"
-    >
-        Explore
-    </button>
-
-</div>
 
             <!-- TODAY'S PROMOTION FROM GOOGLE SHEETS -->
 
@@ -237,7 +217,9 @@
 
 
         </section>
-                <!-- MENU PAGE -->
+
+
+        <!-- MENU PAGE -->
 
         <section
             id="menuPage"
@@ -286,42 +268,74 @@
             </div>
 
 
-            <!-- CATEGORY FILTER -->
+          <!-- CATEGORY FILTER -->
 
-            <div class="category-tabs">
+<div class="category-tabs">
 
-                <button
-                    class="category-btn active"
-                    onclick="filterMenu('all', this)"
-                >
-                    All
-                </button>
+    <button
+        class="category-btn active"
+        data-category="all"
+        onclick="filterMenu('all', this)">
+        All
+    </button>
 
+    <button
+        class="category-btn"
+        data-category="dessert"
+        onclick="filterMenu('dessert', this)">
+        Dessert
+    </button>
 
-                <button
-                    class="category-btn"
-                    onclick="filterMenu('dessert', this)"
-                >
-                    Dessert
-                </button>
+    <button
+        class="category-btn"
+        data-category="beverages"
+        onclick="filterMenu('beverages', this)">
+        Beverage
+    </button>
 
+    <button
+        class="category-btn"
+        data-category="pasta"
+        onclick="filterMenu('pasta', this)">
+        Pasta
+    </button>
 
-                <button
-                    class="category-btn"
-                    onclick="filterMenu('coffee', this)"
-                >
-                    Coffee
-                </button>
+    <button
+        class="category-btn"
+        data-category="snack"
+        onclick="filterMenu('snack', this)">
+        Snack
+    </button>
 
+    <button
+        class="category-btn"
+        data-category="ready to eat"
+        onclick="filterMenu('ready to eat', this)">
+        Ready to Eat
+    </button>
 
-                <button
-                    class="category-btn"
-                    onclick="filterMenu('pasta', this)"
-                >
-                    Pasta
-                </button>
+    <button
+        class="category-btn"
+        data-category="frozen food"
+        onclick="filterMenu('frozen food', this)">
+        Frozen Food
+    </button>
 
-            </div>
+    <button
+        class="category-btn"
+        data-category="gift box"
+        onclick="filterMenu('gift box', this)">
+        Gift Box
+    </button>
+
+    <button
+        class="category-btn"
+        data-category="others"
+        onclick="filterMenu('others', this)">
+        Others
+    </button>
+
+</div>
 
 
             <!-- MENU FROM GOOGLE SHEETS -->
@@ -360,7 +374,6 @@
 
             </div>
 
-
             <!-- PROMOTION FROM GOOGLE SHEETS -->
 
             <div
@@ -370,31 +383,41 @@
 
         </section>
 
-<!-- SERVICES PAGE -->
 
-<section
-    id="servicesPage"
-    class="page"
->
+        <!-- SERVICES PAGE -->
 
-    <div class="page-title">
+        <section
+            id="servicesPage"
+            class="page"
+        >
 
-        <div>
-            <p>More from us</p>
-            <h2>Our Services</h2>
-        </div>
+            <div class="page-title">
 
-        <span>🎉</span>
+                <div>
 
-    </div>
+                    <p>
+                        More from us
+                    </p>
 
+                    <h2>
+                        Our Services
+                    </h2>
 
-    <div
-        id="servicesList"
-        class="promotion-list"
-    ></div>
+                </div>
 
-</section>
+                <span>
+                    🎉
+                </span>
+
+            </div>
+
+            <div
+                id="servicesList"
+                class="promotion-list"
+            ></div>
+
+        </section>
+
 
         <!-- CONTACT PAGE -->
 
@@ -444,12 +467,11 @@
 
                 </div>
 
-                <a
-                    href="https://api.whatsapp.com/send?phone=60148584207"
-                    target="_blank"
-                >
-                    Open
-                </a>
+                <a href="https://api.whatsapp.com/send?phone=60183251397"
+   target="_blank"
+   rel="noopener noreferrer">
+    Open
+</a>
 
             </div>
 
@@ -474,33 +496,38 @@
 
                 </div>
 
-                <a
-                    href="https://www.google.com/maps/search/?api=1&query=Qiessert+Bites+Sendayan"
-                    target="_blank"
-                >
-                    Maps
-                </a>
+               <a href="https://www.google.com/maps/search/?api=1&query=96-G,+Persiaran+Metro+Sendayan+2,+Bandar+Sri+Sendayan,+71950+Siliau,+Negeri+Sembilan"
+   target="_blank"
+   rel="noopener noreferrer">
+    Maps
+</a>
 
             </div>
 
-<div class="contact-card">
 
-    <div class="contact-icon">
-        🕒
-    </div>
+            <!-- OPERATING HOURS -->
 
-    <div>
-        <h3>
-            Operating Hours
-        </h3>
+            <div class="contact-card">
 
-        <p>
-            Monday - Sunday<br>
-            10:00 AM - 10:00 PM
-        </p>
-    </div>
+                <div class="contact-icon">
+                    🕒
+                </div>
 
-</div>
+                <div>
+
+                    <h3>
+                        Operating Hours
+                    </h3>
+
+                    <p>
+                        Monday - Sunday<br>
+                        10:00 AM - 10:00 PM
+                    </p>
+
+                </div>
+
+            </div>
+
 
             <!-- SOCIAL MEDIA -->
 
@@ -520,11 +547,29 @@
                         Follow our latest updates and promotions.
                     </p>
 
-                </div>
+                    <div class="social-links">
 
-                <a href="#">
-                    Soon
-                </a>
+                        <a href="https://www.tiktok.com/@qiessert.bites4?_r=1&_t=ZS-98Rh2fmxC3Y"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            🎵 TikTok
+                        </a>
+
+                        <a href="https://www.instagram.com/qiessertbites?igsh=MTY4aXQ1MGRkajJvMg=="
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            📷 Instagram
+                        </a>
+
+                        <a href="https://www.facebook.com/share/1EkPKhVEVX/"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            📘 Facebook
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -551,19 +596,21 @@
             </div>
 
         </section>
-            </main>
+
+    </main>
 
 
     <!-- FLOATING WHATSAPP BUTTON -->
 
-    <a
-        href="https://api.whatsapp.com/send?phone=60148584207"
-        class="floating-whatsapp"
-        target="_blank"
-        aria-label="WhatsApp"
-    >
-        💬
-    </a>
+   <a
+    href="https://api.whatsapp.com/send?phone=60183251397"
+    class="floating-whatsapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="WhatsApp"
+>
+    💬
+</a>
 
 
     <!-- BOTTOM NAVIGATION -->
@@ -575,59 +622,40 @@
             onclick="showPage('homePage', this)"
         >
             <span>🏠</span>
-
-            <small>
-                Home
-            </small>
+            <small>Home</small>
         </button>
-
 
         <button
             class="nav-btn"
             onclick="showPage('menuPage', this)"
         >
             <span>🍰</span>
-
-            <small>
-                Menu
-            </small>
+            <small>Menu</small>
         </button>
-
 
         <button
             class="nav-btn"
             onclick="showPage('promoPage', this)"
         >
             <span>🎁</span>
-
-            <small>
-                Promo
-            </small>
+            <small>Promo</small>
         </button>
-
 
         <button
             class="nav-btn"
             onclick="showPage('contactPage', this)"
         >
             <span>💬</span>
-
-            <small>
-                Contact
-            </small>
+            <small>Contact</small>
         </button>
 
     </nav>
 
-
 </div>
-
 
 <!-- JAVASCRIPT -->
 
 <script src="script.js?v=500"></script>
 
-
 </body>
-
 </html>
