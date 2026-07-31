@@ -11,6 +11,11 @@ const PROMOTION_CSV_URL =
 const SERVICES_CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1jJEVNs3uhxNx82CJ4N7oMOI3njrrTAflUdxlz7QtCTBHFAlm2XQu6-UEJwGJ69wrnIlYikDsvRk3/pub?gid=21556612&single=true&output=csv";
 
+// ===============================
+// SHOPPING CART
+// ===============================
+
+let cart = [];
 
 // ===============================
 // PAGE NAVIGATION
@@ -160,11 +165,14 @@ async function loadMenu() {
             const price =
                 columns[3] || "";
 
-            const image =
-                columns[4] || "";
+           const image =
+    columns[4] || "";
 
-            const status =
-                (columns[5] || "").toLowerCase();
+const status =
+    (columns[5] || "").toLowerCase();
+
+const stock =
+    parseInt(columns[6]) || 0;
 
             if (status !== "active") return;
 
@@ -190,28 +198,39 @@ async function loadMenu() {
                             ${productName}
                         </h3>
 
-                        <p>
-                            Available at Qiessert Bites.
-                        </p>
+                       <p>
+    Stock: ${stock} available
+</p>
 
-                        <div class="food-bottom">
+                      <div class="food-bottom">
 
-                            <strong>
-                                RM${price}
-                            </strong>
+    <strong>
+        RM${price}
+    </strong>
 
-                            <a
-                                href="https://api.whatsapp.com/send?phone=60183251397&text=${encodeURIComponent(
-                                    `Hi Qiessert Bites, saya nak order ${productName}`
-                                )}"
-                                class="small-order-btn"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Order
-                            </a>
+    ${
+        stock > 0
+            ? `
+                <button
+                    type="button"
+                    class="small-order-btn"
+                    onclick="addToCart('${productName.replace(/'/g, "\\'")}', '${price}', ${stock})"
+                >
+                    Add to Cart
+                </button>
+            `
+            : `
+                <button
+                    type="button"
+                    class="small-order-btn"
+                    disabled
+                >
+                    Out of Stock
+                </button>
+            `
+    }
 
-                        </div>
+</div>
 
                     </div>
 
@@ -733,9 +752,6 @@ async function loadHomePromotion() {
 
 
 // ===============================
-// START APP
-// ===============================
-// ===============================
 // OPEN CATEGORY FROM HOME
 // ===============================
 
@@ -752,15 +768,266 @@ async function openCategory(category) {
 
     window.scrollTo(0, 0);
 }
+// ===============================
+// ADD TO CART
+// ===============================
+
+function addToCart(productName, price, stock) {
+
+    const existingItem = cart.find(
+        item => item.productName === productName
+    );
+
+    if (existingItem) {
+
+    if (existingItem.quantity >= existingItem.stock) {
+        alert("Maximum stock reached.");
+        return;
+    }
+
+    existingItem.quantity++;
+
+} else {
+
+       cart.push({
+    productName: productName,
+    price: parseFloat(price),
+    quantity: 1,
+    stock: stock
+});
+
+    }
+
+    updateCartCount();
+
+
+}
+// ===============================
+// UPDATE CART COUNT
+// ===============================
+
+function updateCartCount(){
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+        total += item.quantity;
+
+    });
+
+    document.getElementById("cartCount").textContent = total;
+
+}
+
+// ===============================
+// OPEN CART
+// ===============================
+
+function openCart() {
+
+    const cartItems =
+        document.getElementById("cartItems");
+
+        cartItems.scrollTop = 0;
+
+    const cartTotal =
+        document.getElementById("cartTotal");
+
+    if(cart.length === 0){
+
+        cartItems.innerHTML = `
+            <p>Your cart is empty.</p>
+        `;
+
+        cartTotal.textContent = "Total : RM0.00";
+
+    }else{
+
+        let html = "";
+
+        let total = 0;
+
+        cart.forEach(item =>{
+
+            total += item.price * item.quantity;
+
+          html += `
+    <div class="cart-item">
+
+        <div class="cart-item-info">
+
+            <h4>${item.productName}</h4>
+
+            <p>
+                RM${item.price.toFixed(2)}
+            </p>
+
+        </div>
+
+        <div class="cart-quantity">
+
+            <button
+                type="button"
+                onclick="decreaseQuantity('${item.productName.replace(/'/g, "\\'")}')"
+            >
+                −
+            </button>
+
+            <span>
+                ${item.quantity}
+            </span>
+
+            <button
+                type="button"
+                onclick="increaseQuantity('${item.productName.replace(/'/g, "\\'")}')"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+`;
+
+        });
+
+        cartItems.innerHTML = html;
+
+        cartTotal.textContent =
+            `Total : RM${total.toFixed(2)}`;
+
+    }
+
+    document
+        .getElementById("cartPanel")
+        .classList.add("active");
+
+    document
+        .getElementById("cartOverlay")
+        .classList.add("active");
+
+}
+
+// ===============================
+// INCREASE CART QUANTITY
+// ===============================
+
+function increaseQuantity(productName) {
+
+    const item = cart.find(
+        item => item.productName === productName
+    );
+
+    if (!item) return;
+
+    if (item.quantity >= item.stock) {
+
+        alert("Only " + item.stock + " item(s) available.");
+        return;
+
+    }
+
+    item.quantity++;
+
+    updateCartCount();
+    openCart();
+}
+
+
+// ===============================
+// DECREASE CART QUANTITY
+// ===============================
+
+function decreaseQuantity(productName) {
+
+    const item = cart.find(
+        item => item.productName === productName
+    );
+
+    if (!item) return;
+
+    item.quantity--;
+
+    if (item.quantity <= 0) {
+
+        cart = cart.filter(
+            cartItem =>
+                cartItem.productName !== productName
+        );
+    }
+
+    updateCartCount();
+    openCart();
+}
+
+
+// ===============================
+// CLOSE CART
+// ===============================
+
+function closeCart() {
+
+    document
+        .getElementById("cartPanel")
+        .classList.remove("active");
+
+    document
+        .getElementById("cartOverlay")
+        .classList.remove("active");
+
+}
+
+// ===============================
+// CHECKOUT WHATSAPP
+// ===============================
+
+function checkoutWhatsApp() {
+
+    if (cart.length === 0) {
+
+        alert("Your cart is empty.");
+        return;
+
+    }
+
+    let message = `Hi Qiessert Bites,
+
+Saya ingin membuat pesanan:
+
+`;
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+
+        message += `${index + 1}. ${item.productName} x${item.quantity}
+`;
+
+        total += item.price * item.quantity;
+
+    });
+
+    message += `
+Jumlah : RM${total.toFixed(2)}
+
+Terima kasih.`;
+
+    const whatsappURL =
+        `https://api.whatsapp.com/send?phone=60183251397&text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappURL, "_blank");
+}
+
+// ===============================
+// START APP
+// ===============================
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        await loadMenu();
-        await loadPromotions();
-        await loadHomePromotion();
-        await loadServices();
-
         await showPage("homePage");
+
     }
 );

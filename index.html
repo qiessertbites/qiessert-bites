@@ -652,6 +652,41 @@
     </nav>
 
 </div>
+<div id="cartButton" class="cart-button" onclick="openCart()">
+    🛒 Cart (<span id="cartCount">0</span>)
+</div>
+<div id="cartPanel" class="cart-panel">
+
+    <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button onclick="closeCart()">✖</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-footer">
+
+        <h3 id="cartTotal">
+            Total : RM0.00
+        </h3>
+
+        <button
+    id="checkoutBtn"
+    class="checkout-btn"
+    onclick="checkoutWhatsApp()"
+>
+    Order via WhatsApp
+</button>
+
+    </div>
+
+</div>
+
+<div
+    id="cartOverlay"
+    class="cart-overlay"
+    onclick="closeCart()"
+></div>
 
 <!-- JAVASCRIPT -->
 
