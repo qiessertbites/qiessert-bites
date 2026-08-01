@@ -171,8 +171,22 @@ async function loadMenu() {
 const status =
     (columns[5] || "").toLowerCase();
 
-const stock =
-    parseInt(columns[6]) || 0;
+const categoryLower =
+    category.trim().toLowerCase();
+
+const noStockCategories = [
+    "pasta",
+    "signature",
+    "handcrafted"
+];
+
+const usesStock =
+    !noStockCategories.includes(categoryLower);
+
+const stock = usesStock
+    ? parseInt(columns[6]) || 0
+    : null;
+
 
             if (status !== "active") return;
 
@@ -198,23 +212,29 @@ const stock =
                             ${productName}
                         </h3>
 
-                       <p>
-    Stock: ${stock} available
-</p>
+                    ${
+    usesStock
+        ? `
+            <p>
+                Stock: ${stock} available
+            </p>
+        `
+        : ""
+}
 
-                      <div class="food-bottom">
+                     <div class="food-bottom">
 
     <strong>
         RM${price}
     </strong>
 
     ${
-        stock > 0
+        !usesStock || stock > 0
             ? `
                 <button
                     type="button"
                     class="small-order-btn"
-                    onclick="addToCart('${productName.replace(/'/g, "\\'")}', '${price}', ${stock})"
+                    onclick="addToCart('${productName.replace(/'/g, "\\'")}', '${price}', ${usesStock ? stock : 999})"
                 >
                     Add to Cart
                 </button>
@@ -780,27 +800,25 @@ function addToCart(productName, price, stock) {
 
     if (existingItem) {
 
-    if (existingItem.quantity >= existingItem.stock) {
-        alert("Maximum stock reached.");
-        return;
-    }
+        if (existingItem.quantity >= existingItem.stock) {
+            alert("Maximum stock reached.");
+            return;
+        }
 
-    existingItem.quantity++;
+        existingItem.quantity++;
 
-} else {
+    } else {
 
-       cart.push({
-    productName: productName,
-    price: parseFloat(price),
-    quantity: 1,
-    stock: stock
-});
+        cart.push({
+            productName: productName,
+            price: parseFloat(price),
+            quantity: 1,
+            stock: stock
+        });
 
     }
 
     updateCartCount();
-
-
 }
 // ===============================
 // UPDATE CART COUNT
