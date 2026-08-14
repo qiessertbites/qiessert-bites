@@ -458,53 +458,62 @@ menuRows.forEach((line) => {
 
             if (status !== "active") return;
 
+            const whatsappMessage =
+    encodeURIComponent(
+        `Hi Qiessert Bites, saya berminat dengan ${title} promotion${relatedItem ? ` for ${relatedItem}` : ""}.`
+    );
+
             promotionHTML += `
-                <div class="promotion-card">
+    <a
+        class="promotion-card"
+        href="https://wa.me/60183251397?text=${whatsappMessage}"
+        target="_blank"
+        style="cursor: pointer; text-decoration: none; color: inherit;"
+    >
 
-                   <div class="promotion-icon">
+        <div class="promotion-icon">
+            ${
+                relatedImage
+                    ? `
+                        <img
+                            src="${relatedImage}"
+                            alt="${relatedItem}"
+                            class="promotion-item-image"
+                        >
+                    `
+                    : "🎁"
+            }
+        </div>
 
-    ${
-        relatedImage
-            ? `
-                <img
-                    src="${relatedImage}"
-                    alt="${relatedItem}"
-                    class="promotion-item-image"
-                >
-            `
-            : "🎁"
-    }
+        <div>
 
-</div>
+            <span>
+                Latest Promotion
+            </span>
 
-                    <div>
+            <h3>
+                ${title}
+            </h3>
 
-                        <span>
-                            Latest Promotion
-                        </span>
-
-                        <h3>
-                            ${title}
-                        </h3>
-
-                        <p>
-                            ${description}
-                        </p>
-
-${
-    relatedItem
-        ? `
             <p>
-                <strong>Related Item:</strong>
-                ${relatedItem}
+                ${description}
             </p>
-        `
-        : ""
-}
-                    </div>
 
-                </div>
-            `;
+            ${
+                relatedItem
+                    ? `
+                        <p>
+                            <strong>Related Item:</strong>
+                            ${relatedItem}
+                        </p>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    </a>
+`;
         });
 
         promotionList.innerHTML =
