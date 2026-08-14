@@ -388,6 +388,37 @@ async function loadPromotions() {
 
     try {
 
+        const menuResponse = await fetch(
+    MENU_CSV_URL + "&t=" + Date.now(),
+    {
+        cache: "no-store"
+    }
+);
+
+const menuText = await menuResponse.text();
+
+const menuRows = menuText
+    .trim()
+    .split(/\r?\n/)
+    .slice(1);
+
+const menuImageMap = {};
+
+menuRows.forEach((line) => {
+
+    const columns = parseCSVLine(line);
+
+    const productName =
+        (columns[1] || "").trim().toLowerCase();
+
+    const image =
+        columns[4] || "";
+
+    if (productName) {
+        menuImageMap[productName] = image;
+    }
+});
+
         const response = await fetch(
             PROMOTION_CSV_URL + "&t=" + Date.now(),
             {
@@ -418,14 +449,33 @@ async function loadPromotions() {
             const status =
                 (columns[3] || "").toLowerCase();
 
+           const relatedItem = columns[4] || "";
+
+           const relatedImage =
+    menuImageMap[
+        relatedItem.trim().toLowerCase()
+    ] || "";
+
             if (status !== "active") return;
 
             promotionHTML += `
                 <div class="promotion-card">
 
-                    <div class="promotion-icon">
-                        🎁
-                    </div>
+                   <div class="promotion-icon">
+
+    ${
+        relatedImage
+            ? `
+                <img
+                    src="${relatedImage}"
+                    alt="${relatedItem}"
+                    class="promotion-item-image"
+                >
+            `
+            : "🎁"
+    }
+
+</div>
 
                     <div>
 
@@ -441,6 +491,16 @@ async function loadPromotions() {
                             ${description}
                         </p>
 
+${
+    relatedItem
+        ? `
+            <p>
+                <strong>Related Item:</strong>
+                ${relatedItem}
+            </p>
+        `
+        : ""
+}
                     </div>
 
                 </div>
