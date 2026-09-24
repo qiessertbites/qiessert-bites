@@ -234,7 +234,7 @@ const stock = usesStock
                 <button
                     type="button"
                     class="small-order-btn"
-                    onclick="addToCart('${productName.replace(/'/g, "\\'")}', '${price}', ${usesStock ? stock : 999})"
+                    onclick="addToCart('${columns[0]}', '${productName.replace(/'/g, "\\'")}', '${price}', ${usesStock ? stock : 999}, ${usesStock})"
                 >
                     Add to Cart
                 </button>
@@ -861,10 +861,10 @@ async function openCategory(category) {
 // ADD TO CART
 // ===============================
 
-function addToCart(productName, price, stock) {
+function addToCart(productId, productName, price, stock, usesStock) {
 
     const existingItem = cart.find(
-        item => item.productName === productName
+        item => item.productId === productId
     );
 
     if (existingItem) {
@@ -879,10 +879,12 @@ function addToCart(productName, price, stock) {
     } else {
 
         cart.push({
+            productId: productId,
             productName: productName,
             price: parseFloat(price),
             quantity: 1,
-            stock: stock
+            stock: stock,
+            usesStock: usesStock
         });
 
     }
@@ -1069,6 +1071,10 @@ function closeCart() {
 // CHECKOUT WHATSAPP
 // ===============================
 
+const STOCK_API_URL =
+    "https://script.google.com/macros/s/AKfycbwJsYcXxay97keaCLiVcwYGK_AYbLIXVcXLTkRzusOp70uwYfoAckXQLp-7Qxl6Q4PZ/exec";
+
+
 function checkoutWhatsApp() {
 
     if (cart.length === 0) {
@@ -1078,7 +1084,20 @@ function checkoutWhatsApp() {
 
     }
 
-    let message = `Hi Qiessert Bites,
+    const checkoutButton =
+        document.getElementById("checkoutBtn");
+
+    if (checkoutButton) {
+        checkoutButton.disabled = true;
+    }
+
+    // Create one unique order ID
+    const orderId =
+        "QB-" +
+        Date.now();
+
+    let message =
+`Hi Qiessert Bites,
 
 Saya ingin membuat pesanan:
 
@@ -1088,22 +1107,67 @@ Saya ingin membuat pesanan:
 
     cart.forEach((item, index) => {
 
-        message += `${index + 1}. ${item.productName} x${item.quantity}
-`;
+        message +=
+            `${index + 1}. ${item.productName} x${item.quantity}\n`;
 
-        total += item.price * item.quantity;
+        total +=
+            item.price * item.quantity;
+
+        // Only deduct stock for products that use stock
+        if (item.usesStock && item.productId) {
+
+            const url =
+                STOCK_API_URL +
+                "?productId=" +
+                encodeURIComponent(item.productId) +
+                "&quantity=" +
+                encodeURIComponent(item.quantity) +
+                "&orderId=" +
+                encodeURIComponent(orderId);
+
+            // Send order information to Google Apps Script
+            fetch(url, {
+                method: "GET",
+                mode: "no-cors",
+                keepalive: true
+            }).catch(error => {
+                console.error(
+                    "Stock update error:",
+                    error
+                );
+            });
+        }
 
     });
 
-    message += `
+    message +=
+`
 Jumlah : RM${total.toFixed(2)}
+
+Order ID : ${orderId}
 
 Terima kasih.`;
 
     const whatsappURL =
         `https://api.whatsapp.com/send?phone=60183251397&text=${encodeURIComponent(message)}`;
 
-    window.open(whatsappURL, "_blank");
+    // Open WhatsApp
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+    // Clear cart after order
+    cart = [];
+
+    updateCartCount();
+
+    closeCart();
+
+    if (checkoutButton) {
+        checkoutButton.disabled = false;
+    }
+
 }
 
 // ===============================
