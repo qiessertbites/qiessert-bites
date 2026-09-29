@@ -1072,7 +1072,7 @@ function closeCart() {
 // ===============================
 
 const STOCK_API_URL =
-    "https://script.google.com/macros/s/AKfycbwJsYcXxay97keaCLiVcwYGK_AYbLIXVcXLTkRzusOp70uwYfoAckXQLp-7Qxl6Q4PZ/exec";
+    "https://script.google.com/macros/s/AKfycbzMHz_Fmfv5aFxREesYvNxHwutsQJEtH2sPAFBbh08Qy_PjGU7q8gPFs00PB_VTer7I/exec";
 
 
 function checkoutWhatsApp() {
